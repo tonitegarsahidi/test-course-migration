@@ -37,6 +37,7 @@ await knex.schema.createTable('user', (table) => {
     table.string('password').notNullable();
     table.timestamp('created_date').defaultTo(knex.fn.now());
     table.timestamp('modified_date').defaultTo(knex.fn.now());
+    table.string('roles').defaultTo("ROLE_USER");
     table.string('created_by');
     table.string('modified_by');
     table.string('lock_verify');

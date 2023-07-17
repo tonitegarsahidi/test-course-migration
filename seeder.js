@@ -15,79 +15,169 @@ const knex = require('knex')({
   }
 });
 
-// Function to generate sample data for 'user' table
-const generateUser = async () => {
-  const saltRounds = 10;
-  const pepper = process.env.DB_PASSWORD_PEPPER; // Pepper value from .env file
-  const password = await bcrypt.hash('password123' + pepper, saltRounds);
-
-  return {
-    email: faker.internet.email().toLowerCase(),
-    full_name: faker.name.findName(),
-    phone_number: faker.phone.phoneNumber(),
-    password: password,
-    created_date: knex.fn.now(),
-    modified_date: knex.fn.now(),
-    created_by: 'Seeder',
-    modified_by: 'Seeder',
-    lock_verify: 'ABC123'
-  };
-};
-
-// Function to generate sample data for 'course' table
-const generateCourse = () => {
-  return {
-    name: faker.random.word(),
-    author: faker.name.findName(),
-    price: faker.datatype.number({ min: 10, max: 100 }),
-    created_date: knex.fn.now(),
-    modified_date: knex.fn.now(),
-    created_by: 'Seeder',
-    modified_by: 'Seeder',
-    lock_verify: 'ABC123'
-  };
-};
-
-// Function to generate sample data for 'user_course' table
-const generateUserCourse = (userId, courseId) => {
-  return {
-    user_id: userId,
-    course_id: courseId,
-    buy_date: knex.fn.now(),
-    buy_price: faker.datatype.number({ min: 10, max: 100 }),
-    is_active: true,
-    created_date: knex.fn.now(),
-    modified_date: knex.fn.now(),
-    created_by: 'Seeder',
-    modified_by: 'Seeder',
-    lock_verify: 'ABC123'
-  };
-};
 
 
-const seedDatabase = async () => {
+const newSeedDatabase = async () => {
   try {
+
+    const saltRounds = 10;
+    const pepper = process.env.DB_PASSWORD_PEPPER; // Pepper value from .env file
+    const password = await bcrypt.hash('password123' + pepper, saltRounds);
     // Seed 'user' table
-    const userCount = 10; // Number of user records to generate
-    const userRecordsPromises = Array.from({ length: userCount }, generateUser);
-    const userRecords = await Promise.all(userRecordsPromises);
+    const userRecords = [
+      {
+        id: 1,
+        email: "admin@courseapp.com",
+        full_name: "John the Admin",
+        phone_number: faker.phone.phoneNumber(),
+        password: password,
+        roles: "ROLE_ADMIN",
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        id: 2,
+        email: "billy@courseapp.com",
+        full_name: "Billy The User",
+        phone_number: faker.phone.phoneNumber(),
+        password: password,
+        roles: "ROLE_USER",
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        id: 3,
+        email: "budi@courseapp.com",
+        full_name: "Budi The User",
+        phone_number: faker.phone.phoneNumber(),
+        password: password,
+        roles: "ROLE_USER",
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+
+    ]
     await knex('user').insert(userRecords);
 
-    // Seed 'course' table
-    const courseCount = 5; // Number of course records to generate
-    const courseRecordsPromises = Array.from({ length: courseCount }, generateCourse);
-    const courseRecords = await Promise.all(courseRecordsPromises);
+    const courseRecords = [
+      {
+        id: 1,
+        name: "Data Engineer Untuk Guru",
+        author: "Laode Napitulu",
+        price: 90000,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        id: 2,
+        name: "Memahami Fullstack dalam Satu Jam",
+        author: "Sam Toni",
+        price: 120000,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        id: 3,
+        name: "Kreasi Aneka Masakan Ayam Bakar",
+        author: "Chef Rosyida",
+        price: 60000,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        id: 4,
+        name: "Menggambar Doodle dan Mewarnainya",
+        author: "Mas Dimboy",
+        price: 25000,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+    ];
     await knex('course').insert(courseRecords);
 
-    // Seed 'user_course' table
-    const userCourseCount = 20; // Number of user_course records to generate
-    const userCourseRecordsPromises = Array.from({ length: userCourseCount }, () => {
-      const userId = faker.datatype.number({ min: 1, max: userCount });
-      const courseId = faker.datatype.number({ min: 1, max: courseCount });
-      
-      return generateUserCourse(userId, courseId);
-    });
-    const userCourseRecords = await Promise.all(userCourseRecordsPromises);
+    const userCourseRecords = [
+      {
+        user_id: 1,
+        course_id: 1,
+        buy_date: knex.fn.now(),
+        buy_price: 90000,
+        is_active: true,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        user_id: 2,
+        course_id: 1,
+        buy_date: knex.fn.now(),
+        buy_price: 90000,
+        is_active: true,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        user_id: 1,
+        course_id: 2,
+        buy_date: knex.fn.now(),
+        buy_price: 0,
+        is_active: true,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        user_id: 2,
+        course_id: 2,
+        buy_date: knex.fn.now(),
+        buy_price: 0,
+        is_active: true,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      },
+      {
+        user_id: 2,
+        course_id: 3,
+        buy_date: knex.fn.now(),
+        buy_price: 0,
+        is_active: true,
+        created_date: knex.fn.now(),
+        modified_date: knex.fn.now(),
+        created_by: 'Seeder',
+        modified_by: 'Seeder',
+        lock_verify: 'ABC123'
+      }
+    ];
     await knex('user_course').insert(userCourseRecords);
 
     console.log('Database seeding completed!');
@@ -98,5 +188,6 @@ const seedDatabase = async () => {
   }
 };
 
+
 // Call the seeder function
-seedDatabase();
+newSeedDatabase();
